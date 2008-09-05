@@ -1,0 +1,48 @@
+NB. project file: c:/users/rsherloc/documents/j602-user/jsrc/addons/tables/dsv/dsv
+
+coclass 'jproject'
+
+PRIMARYFILES=: 0 : 0
+~Addons/tables/dsv/init
+~Addons/tables/dsv/utils
+~Addons/tables/dsv/fromdsv
+~Addons/tables/dsv/todsv
+~Addons/tables/dsv/zfns
+)
+
+PRIMARYLIBS=: 0 : 0
+files
+strings
+)
+
+DEVFILES=: ''
+
+DEVLIBS=: ''
+
+OTHERFILES=: 0 : 0
+~Addons/tables/dsv/history.txt
+~Addons/tables/dsv/manifest.ijs
+~Addons/tables/dsv/test_dsv.ijs
+)
+
+TARGETFILE=: '~Addons/tables/dsv/dsv.ijs'
+
+TARGETLOCALE=: 'pdsv'
+
+TARGETHEADER=: ''
+
+TARGETEXTRA=: ''
+
+BUILDOPTS=: 0 1 0 0 0 0 0
+
+PREBUILDFILE=: ''
+
+POSTBUILDFILE=: ''
+
+TESTFILE=: '~Addons/tables/dsv/test_proj.ijs'
+
+NOTES=: ''
+
+VERSION=: ''
+
+WINDOWS=: ''
