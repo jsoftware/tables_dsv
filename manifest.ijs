@@ -19,5 +19,5 @@ FILES=: 0 : 0
 history.txt
 manifest.ijs
 dsv.ijs
-test_dsv.ijs
+test/test_dsv.ijs
 )
