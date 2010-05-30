@@ -1,4 +1,4 @@
-NB. project file: ~Addons/tables/dsv/dsv
+NB. project file: c:/users/rsherloc/documents/j602-user/jsrc/addons/tables/dsv/dsv
 
 coclass 'jproject'
 
@@ -10,10 +10,7 @@ PRIMARYFILES=: 0 : 0
 ~Addons/tables/dsv/source/zfns
 )
 
-PRIMARYLIBS=: 0 : 0
-files
-strings
-)
+PRIMARYLIBS=: ''
 
 DEVFILES=: ''
 

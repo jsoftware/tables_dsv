@@ -1,12 +1,11 @@
 NB. built from project: ~Addons/tables/dsv/dsv
 NB. =========================================================
-NB. utilities for working with 
-NB. delimiter-separated value strings and files
-
-script_z_ '~system/main/files.ijs'
-script_z_ '~system/main/strings.ijs'
+NB. tables/dsv
+NB. Read/write delimiter-separated value strings and files
+NB. Supports user-specified delimiters (General case of CSV).
 
 
+require 'files strings'
 coclass 'pdsv'
 
 NB. =========================================================
