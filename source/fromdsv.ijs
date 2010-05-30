@@ -16,9 +16,9 @@ fixdsv=: 3 : 0
   :
   dat=. y
   'fd sd'=. 2{. boxopen x
-  if. =/sd do. sd=. (-<:#sd)}.sd   NB. empty, one or two same
+  if. =/sd do. sd=. (-<:#sd)}.sd     NB. empty, one or two same
   else.
-    s=. {.('|'=fd){ '|`'  NB. choose single sd
+    s=. {.('|'=fd){ '|`'             NB. choose single sd
     dat=. dat rplc ({.sd);s;({:sd);s
     sd=. s
   end.

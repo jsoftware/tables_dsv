@@ -48,10 +48,10 @@ enclosestrings=: 3 : 0
   :
   if. 1=#sd=. x do. sd=. 2#sd end.
   dat=. ,y
-  t=. #. ((0<#@$) , (isreal,.ischar)@:(3!:0)) &> dat NB. cell data type
-  dat=. ((#idx)$sd enclose idx{dat)(idx=. I. t e. 1 5)}dat NB. quote char cells
-  dat=. (8!:0 idx{dat) (idx=. I. 2=t)}dat    NB. format numeric cells
-  dat=. (":@:,@:> &.> idx{dat)(idx=. I. t e. 0 4 6)}dat NB. handle complex, boxed, numeric rank>0
+  t=. #. ((0<#@$) , (isreal,.ischar)@:(3!:0)) &> dat        NB. cell data type
+  dat=. ((#idx)$sd enclose idx{dat)(idx=. I. t e. 1 5)}dat  NB. quote char cells
+  dat=. (8!:0 idx{dat) (idx=. I. 2=t)}dat                   NB. format numeric cells
+  dat=. (":@:,@:> &.> idx{dat)(idx=. I. t e. 0 4 6)}dat     NB. handle complex, boxed, numeric rank>0
   ($y)$dat
 )
 
@@ -67,9 +67,9 @@ makenum=: 3 : 0
   dat=. , x&". &.> y=. boxopen y
   idx=. I. x&e.@> dat
   if. #idx do.
-    dat=. (idx{,y) idx}dat NB. amend non-numeric cells
+    dat=. (idx{,y) idx}dat  NB. amend non-numeric cells
   else.
-    dat=. >dat NB. unbox to list if all numeric
+    dat=. >dat              NB. unbox to list if all numeric
   end.
   ($y)$dat
 )
@@ -85,12 +85,12 @@ makenumcol=: 3 : 0
   _9999 makenumcol y
   :
   dat=. x&". &.> y=. boxopen y
-  notnum=. x&e.@> dat NB. mask of boxes containing error code
-  idx=. I. +./notnum  NB. index of non-numeric columns
+  notnum=. x&e.@> dat               NB. mask of boxes containing error code
+  idx=. I. +./notnum                NB. index of non-numeric columns
   if. #idx do.
-    dat=. (idx{"1 y) (<a:;idx)}dat NB. amend non-numeric columns
+    dat=. (idx{"1 y) (<a:;idx)}dat  NB. amend non-numeric columns
   else.
-    dat=. >dat NB. unbox to list if all numeric
+    dat=. >dat                      NB. unbox to list if all numeric
   end.
 )
 
@@ -113,9 +113,9 @@ fixdsv=: 3 : 0
   :
   dat=. y
   'fd sd'=. 2{. boxopen x
-  if. =/sd do. sd=. (-<:#sd)}.sd   NB. empty, one or two same
+  if. =/sd do. sd=. (-<:#sd)}.sd     NB. empty, one or two same
   else.
-    s=. {.('|'=fd){ '|`'  NB. choose single sd
+    s=. {.('|'=fd){ '|`'             NB. choose single sd
     dat=. dat rplc ({.sd);s;({:sd);s
     sd=. s
   end.
@@ -178,10 +178,10 @@ delimitarray=: 3 : 0
   :
   'fd sd'=. 2{. boxopen x
   if. (#sd) +. -. *./ ,ischar 3!:0 &>y do. NB. if sd not empty or y not all boxed strings
-    y=. sd enclosestrings y  NB. quote strings & non-strings to string
+    y=. sd enclosestrings y                NB. quote strings & non-strings to string
   end.
   dat=. LF joindsv ,<@(fd&joindsv)"1 y
-  dat, (1<#$y)#LF  NB. append LF for arrays rank >1
+  dat, (1<#$y)#LF                          NB. append LF for arrays rank >1
 )
 
 --------------------------------------------------
@@ -216,8 +216,8 @@ NB. Arrays are flattened to a max rank of 2.
 makedsv=: 3 : 0
   (TAB;'""') makedsv y
   :
-  dat=. y=. ,/^:(0>. _2+ [:#$) y NB. flatten to max rank 2
-  dat=. y=. ,:^:(2<. 2- [:#$) y NB. raise to min rank 2
+  dat=. y=. ,/^:(0>. _2+ [:#$) y   NB. flatten to max rank 2
+  dat=. y=. ,:^:(2<. 2- [:#$) y    NB. raise to min rank 2
   'fd sd'=. 2{. boxopen x
   if. 1=#sd do. sd=. 2#sd end.
   NB. delim=. ',';',"';'",';'","';'';'"';'"'
@@ -226,33 +226,33 @@ makedsv=: 3 : 0
   NB. choose best method for column datatypes
   try. type=. ischar 3!:0@:>"1 |: dat
     if. ({.!.a: sd) e. ;(<a:;I. type){dat do. assert.0 end. NB. sd in field
-    if. -. +./ type do. NB. all columns numeric
+    if. -. +./ type do.          NB. all columns numeric
       dat=. 8!:0 dat
       delim=. 0{ delim
-    else. NB. columns either numeric or literal
+    else.                        NB. columns either numeric or literal
       idx=. I. -. type
-      if. #idx do. NB. format numeric cols
+      if. #idx do.               NB. format numeric cols
         dat=. (8!:0 tmp{dat) (tmp=. <a:;idx)}dat
-      elseif. 0=L.dat do. NB. y is literal array
+      elseif. 0=L.dat do.        NB. y is literal array
         dat=. ,each 8!:2 each dat
       end.
-      dlmidx=. 2#.\ type  NB. type of each column pair
+      dlmidx=. 2#.\ type         NB. type of each column pair
       dlmidx=. _1|.dlmidx, 4&+@(2 1&*) ({:,{.) type
       delim=. (#dat)# ,: dlmidx { delim
     end.
-  catch.  NB. handle mixed-type columns
+  catch.                         NB. handle mixed-type columns
     dat=. sd enclosestrings dat
     delim=. 0{ delim
   end.
   NB. make an expansion vector to open space between cols
-  d=. 0= 4!:0 <'dlmidx' NB. are there char cols that need quoting
-  c=. 0>. (+:d)+ <:+: {:$dat NB. total num columns incl delims
-  b=. c $d=0 1 NB. insert empty odd cols if d, else even
-  dat=. b #^:_1"1 dat  NB. expand dat
+  d=. 0= 4!:0 <'dlmidx'           NB. are there char cols that need quoting
+  c=. 0>. (+:d)+ <:+: {:$dat      NB. total num columns incl delims
+  b=. c $d=0 1                    NB. insert empty odd cols if d, else even
+  dat=. b #^:_1"1 dat             NB. expand dat
   if. #idx=. I.-.b do.
-    dat=. delim (<a:;idx)}dat  NB. amend with delims
+    dat=. delim (<a:;idx)}dat     NB. amend with delims
   end.
-  ;,dat,.(1=#$dat){LF;a: NB. add EOL if dat not empty & vectorise
+  ;,dat,.(1=#$dat){LF;a:          NB. add EOL if dat not empty & vectorise
 )
 
 NB. ---------------------------------------------------------

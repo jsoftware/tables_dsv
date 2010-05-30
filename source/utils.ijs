@@ -38,10 +38,10 @@ enclosestrings=: 3 : 0
   :
   if. 1=#sd=. x do. sd=. 2#sd end.
   dat=. ,y
-  t=. #. ((0<#@$) , (isreal,.ischar)@:(3!:0)) &> dat NB. cell data type
-  dat=. ((#idx)$sd enclose idx{dat)(idx=. I. t e. 1 5)}dat NB. quote char cells
-  dat=. (8!:0 idx{dat) (idx=. I. 2=t)}dat    NB. format numeric cells
-  dat=. (":@:,@:> &.> idx{dat)(idx=. I. t e. 0 4 6)}dat NB. handle complex, boxed, numeric rank>0
+  t=. #. ((0<#@$) , (isreal,.ischar)@:(3!:0)) &> dat        NB. cell data type
+  dat=. ((#idx)$sd enclose idx{dat)(idx=. I. t e. 1 5)}dat  NB. quote char cells
+  dat=. (8!:0 idx{dat) (idx=. I. 2=t)}dat                   NB. format numeric cells
+  dat=. (":@:,@:> &.> idx{dat)(idx=. I. t e. 0 4 6)}dat     NB. handle complex, boxed, numeric rank>0
   ($y)$dat
 )
 
@@ -57,9 +57,9 @@ makenum=: 3 : 0
   dat=. , x&". &.> y=. boxopen y
   idx=. I. x&e.@> dat
   if. #idx do.
-    dat=. (idx{,y) idx}dat NB. amend non-numeric cells
+    dat=. (idx{,y) idx}dat  NB. amend non-numeric cells
   else.
-    dat=. >dat NB. unbox to list if all numeric
+    dat=. >dat              NB. unbox to list if all numeric
   end.
   ($y)$dat
 )
@@ -75,11 +75,11 @@ makenumcol=: 3 : 0
   _9999 makenumcol y
   :
   dat=. x&". &.> y=. boxopen y
-  notnum=. x&e.@> dat NB. mask of boxes containing error code
-  idx=. I. +./notnum  NB. index of non-numeric columns
+  notnum=. x&e.@> dat               NB. mask of boxes containing error code
+  idx=. I. +./notnum                NB. index of non-numeric columns
   if. #idx do.
-    dat=. (idx{"1 y) (<a:;idx)}dat NB. amend non-numeric columns
+    dat=. (idx{"1 y) (<a:;idx)}dat  NB. amend non-numeric columns
   else.
-    dat=. >dat NB. unbox to list if all numeric
+    dat=. >dat                      NB. unbox to list if all numeric
   end.
 )
