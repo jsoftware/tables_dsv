@@ -11,7 +11,7 @@ Contributed by Ric Sherlock.
 
 VERSION=: '1.0.1'
 
-RELEASE=: 'j701 j602 701'
+RELEASE=: 'j701 j602'
 
 PLATFORMS=: 'win linux darwin'
 
