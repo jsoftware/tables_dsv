@@ -1,13 +1,10 @@
-NB. built from project: ~Addons/tables/dsv/dsv
 NB. =========================================================
 NB. tables/dsv
 NB. Read/write delimiter-separated value strings and files
 NB. Supports user-specified delimiters (General case of CSV).
 
-
 require 'files strings'
 coclass 'pdsv'
-
 NB. =========================================================
 NB. utils for dsv
 
@@ -93,8 +90,6 @@ makenumcol=: 3 : 0
     dat=. >dat                      NB. unbox to list if all numeric
   end.
 )
-
-
 NB. =========================================================
 NB. Convert from delimited strings to arrays of boxes
 
@@ -143,8 +138,6 @@ readdsv=: 3 : 0
   if. dat -: _1 do. return. end.
   x fixdsv dat
 )
-
-
 NB. =========================================================
 NB. Convert from arrays of boxes to delimited strings
 
@@ -272,8 +265,6 @@ writedsv=: 4 : 0
   dat=. (fd;sd) makedsv x
   dat fwrites fln
 )
-
-
 NB. =========================================================
 NB. Verbs exported to z locale
 
@@ -286,4 +277,3 @@ makenum_z_=: makenum_pdsv_
 makenumcol_z_=: makenumcol_pdsv_
 readdsv_z_=: readdsv_pdsv_
 writedsv_z_=: writedsv_pdsv_
-
