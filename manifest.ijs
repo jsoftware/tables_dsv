@@ -13,7 +13,7 @@ VERSION=: '1.0.5'
 
 RELEASE=: 'j802 j801 j701 j602'
 
-PLATFORMS=: 'linux win darwin android'
+PLATFORMS=: ''
 
 FILES=: 0 : 0
 history.txt
