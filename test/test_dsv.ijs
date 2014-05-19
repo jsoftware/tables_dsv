@@ -1,9 +1,11 @@
 NB. test tables/dsv addon
 
 Note 'To run all tests:'
-  load 'tables/dsv'
   load 'tables/dsv/test/test_dsv'
 )
+
+cocurrent 'testdsv'
+load 'tables/dsv'
 
 NB. =========================================================
 NB. create nouns for testing
@@ -87,9 +89,37 @@ p=. p,< 4 u: 215 + i.10
 p=. p,< 4 u: 920 + i. 7
 e1=: 3 4$p
 
-t1=: jpath '~temp/eraseme1.pls'
+testtsv=: noun define
+# The following is an example of a tab-delimited file with
+ # comment lines at the start of the file indicated by the fact they
+ 	# start with the # symbol.
+id	bar code	name
+24582621	119533	DELTOP DAVINCI
+25422991	155439	AMBZED ROSCOE S2F
+25784612	135624	TEF SHADOW BLARIS
+22063188	102545	BIG P BLONDEL PRIM
+20803506	137609	MONGA FLOL
+27360900	107865	FRAMBIN R NOGN ET
+)
 
-ferase t1
+testcsv=: noun define
+	# The following is an example of a comma-separated file with
+  # comment lines at the start of the file indicated by the fact they
+ # start with the # symbol.
+id,bar code,name
+24582621,119533,DELTOP DAVINCI
+25422991,155439,AMBZED ROSCOE S2F
+25784612,135624,TEF SHADOW BLARIS
+22063188,102545,BIG P BLONDEL PRIM
+20803506,137609,MONGA FLOL
+27360900,107865,FRAMBIN R NOGN ET
+)
+
+t1=: jpath '~temp/eraseme1.pls'
+t2=: jpath '~temp/testdsv_tsv.tsv'
+t3=: jpath '~temp/testdsv_csv.csv'
+
+ferase t1;t2;t3
 
 NB. =========================================================
 NB. verb for testing
@@ -139,9 +169,26 @@ test=: 3 : 0
   b2 writedsv t1;'|';'<>'
   assert. (freads t1) -: ('|';'<>') makedsv b2
   assert. (('|';'<>') readdsv t1) -: fixdsv makedsv b2
-  
-  assert. 1 = ferase t1
-  
+
+  NB. test handling of leading comment lines
+  assert. 'ROSCOE' -: dlws_pdsv_ TAB,' ',TAB,' ROSCOE'
+  assert. (; 3 }. <;.2 testtsv) -: droplComments_pdsv_ testtsv
+  assert. (; 3 {. <;.2 testcsv) -: takelComments_pdsv_ testcsv
+  testtsv fwrites t2
+  testcsv fwrites t3
+  assert. (readdsv t2) -: ',' fixdsv droplComments_pdsv_ testcsv
+  assert. ((',';'') makedsv readdsv t2) -: droplComments_pdsv_ testcsv
+
+  NB. test assignment of columns to name in header
+  assert. 'my_name' -: coerce2Name_pdsv_ ' my name '
+  assert. (;:'my_name0 other my_name1') -: uniqify_pdsv_ coerce2Name_pdsv_ &.> ' my_name';'other ';' my name '
+  assign2hdr readdsv t2
+  assert. id = 24582621 25422991 25784612 22063188 20803506 27360900
+  assert. bar_code = 119533 155439 135624 102545 137609 107865
+  assert. name = <;._1 ',DELTOP DAVINCI,AMBZED ROSCOE S2F,TEF SHADOW BLARIS,BIG P BLONDEL PRIM,MONGA FLOL,FRAMBIN R NOGN ET'
+  assert. erase 'id bar_code name'
+  assert. ferase t1;t2;t3
+
   'test_dsv passed'
 )
 

@@ -90,6 +90,25 @@ makenumcol=: 3 : 0
     dat=. >dat                      NB. unbox to list if all numeric
   end.
 )
+
+
+NB. filter the starting block of lines in a text file
+NB. where the first non-whitespace char is #
+dlws=: }.~ (e.&(' ',TAB) i. 0:)             NB. delete leading whitespace
+getIdxFnc=: ([: ((=&'#') i. 0:) {.@dlws;.2) NB. index of first non-comment line
+droplComments=: ;@:(<;.2 }.~ getIdxFnc)     NB. drop leading comments
+takelComments=: ;@:(<;.2 {.~ getIdxFnc)     NB. take leading comments
+getHeader=: ;@:(<;._2 {~ getIdxFnc)         NB. retrieve header line (1st non comment line)
+
+NB. Try to ensure that header names are valid J names
+dlna=: }.~ (e.&Alpha_j_ i. 1:)              NB. drop leading non alpha chars
+coerce2Name=: (' _'&charsub)@dlna@deb       NB. coerce string to valid J name
+
+NB. uniqify v Ensures all boxed literals in a list are unique by appending numeral
+uniqify=: 3 : 0
+  idx=. ([: I. i:~ ~: i.~) y   NB. idx of non unique items
+  ((,&.> 8!:0@i.@#) idx{y) idx}y
+)
 NB. =========================================================
 NB. Convert from delimited strings to arrays of boxes
 
@@ -106,18 +125,19 @@ NB.   (1;1){:: end string delimiter (sd1). Defaults to '"'
 fixdsv=: 3 : 0
   (TAB;'""') fixdsv y
   :
-  dat=. y
+  dat=. ydrp=. droplComments y
   'fd sd'=. 2{. boxopen x
-  if. =/sd do. sd=. (-<:#sd)}.sd     NB. empty, one or two same
+  if. ({. = {:) sd do.         NB. empty, one or two same
+    sd=. ,/(1<.#sd){.sd
   else.
-    s=. {.('|'=fd){ '|`'             NB. choose single sd
-    dat=. dat rplc ({.sd);s;({:sd);s
+    s=. {. '|`' -. fd          NB. use single sd that isn't fd
+    dat=. dat charsub~ ,sd,.s
     sd=. s
   end.
   b=. dat e. LF
   c=. ~:/\ dat e. sd
   msk=. b > c
-  > msk <@(x&chopstring) ;._2 y
+  > msk <@(x&chopstring);._2 ydrp
 )
 
 NB. ---------------------------------------------------------
@@ -215,7 +235,7 @@ makedsv=: 3 : 0
   if. 1=#sd do. sd=. 2#sd end.
   NB. delim=. ',';',"';'",';'","';'';'"';'"'
   delim=. fd ; (fd,}:sd) ; ((}.sd),fd) ; ((}.sd),fd,}:sd) ; '' ; (}:sd) ; }.sd
-  
+
   NB. choose best method for column datatypes
   try. type=. ischar 3!:0@:>"1 |: dat
     if. ({.!.a: sd) e. ;(<a:;I. type){dat do. assert.0 end. NB. sd in field
@@ -268,12 +288,31 @@ writedsv=: 4 : 0
 NB. =========================================================
 NB. Verbs exported to z locale
 
-joindsv_z_=: joindsv_pdsv_
-delimitarray_z_=: delimitarray_pdsv_
 appenddsv_z_=: appenddsv_pdsv_
+delimitarray_z_=: delimitarray_pdsv_
 fixdsv_z_=: fixdsv_pdsv_
+joindsv_z_=: joindsv_pdsv_
 makedsv_z_=: makedsv_pdsv_
 makenum_z_=: makenum_pdsv_
 makenumcol_z_=: makenumcol_pdsv_
 readdsv_z_=: readdsv_pdsv_
 writedsv_z_=: writedsv_pdsv_
+
+NB.*assign2hdr v Assigns columns in table of boxed literals to noun
+NB. form: [hdr] assign2hdr array
+NB. returns: empty
+NB. y is: an array of boxed literals
+NB. x is: optional list of boxed literals to assign columns of y to.
+NB.       default is to use first line of y as header.
+NB. Converts column to numeric if conversion is possible for whole column
+assign2hdr_z_=: 3 : 0
+  'hdr dat'=. split y
+  hdr assign2hdr dat
+:
+  hdr=. uniqify_pdsv_ coerce2Name_pdsv_&.> x
+  dat=. |: makenumcol y
+  idx=. I. 2 ~: (3!:0)&> {."1 dat
+  ((<<<idx){hdr)=: <"1 (<<<idx) { dat
+  (idx{hdr)=: idx { dat
+  EMPTY
+)
