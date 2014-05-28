@@ -115,6 +115,21 @@ id,bar code,name
 27360900,107865,FRAMBIN R NOGN ET
 )
 
+testtsv2=: noun define
+x	y	 9name(last)
+24582621	119533	DELTOP DAVINCI
+25422991	155439	AMBZED ROSCOE S2F
+25784612	135624	TEF SHADOW BLARIS
+)
+
+testcsv2=: noun define
+9id,dat, (all).names
+24582621,119533,DELTOP DAVINCI
+25422991,155439,AMBZED ROSCOE S2F
+25784612,135624,TEF SHADOW BLARIS
+)
+
+
 t1=: jpath '~temp/eraseme1.pls'
 t2=: jpath '~temp/testdsv_tsv.tsv'
 t3=: jpath '~temp/testdsv_csv.csv'
@@ -187,6 +202,8 @@ test=: 3 : 0
   assert. bar_code = 119533 155439 135624 102545 137609 107865
   assert. name = <;._1 ',DELTOP DAVINCI,AMBZED ROSCOE S2F,TEF SHADOW BLARIS,BIG P BLONDEL PRIM,MONGA FLOL,FRAMBIN R NOGN ET'
   assert. erase 'id bar_code name'
+  assign2hdr fixdsv testtsv2
+  assign2hdr (',';'') fixdsv testcsv2
   assert. ferase t1;t2;t3
 
   'test_dsv passed'

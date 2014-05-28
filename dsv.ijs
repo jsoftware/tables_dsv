@@ -101,8 +101,10 @@ takelComments=: ;@:(<;.2 {.~ getIdxFnc)     NB. take leading comments
 getHeader=: ;@:(<;._2 {~ getIdxFnc)         NB. retrieve header line (1st non comment line)
 
 NB. Try to ensure that header names are valid J names
-dlna=: }.~ (e.&Alpha_j_ i. 1:)              NB. drop leading non alpha chars
-coerce2Name=: (' _'&charsub)@dlna@deb       NB. coerce string to valid J name
+forceLeadingAlpha=: ,~ 'X' {.~ [: -.@e.&Alpha_j_ {.
+replaceNonAlpha=: (-.@e.&AlphaNum_j_)`(,:&'_')}
+deus=: #~ (+. (1: |. (> </\)))@('_'&~:)    NB. delete extraneous underscores
+coerce2Name=: forceLeadingAlpha@deus@replaceNonAlpha@deb NB. coerce string to valid J name
 
 NB. uniqify v Ensures all boxed literals in a list are unique by appending numeral
 uniqify=: 3 : 0
@@ -309,10 +311,11 @@ assign2hdr_z_=: 3 : 0
   'hdr dat'=. split y
   hdr assign2hdr dat
 :
-  hdr=. uniqify_pdsv_ coerce2Name_pdsv_&.> x
-  dat=. |: makenumcol y
-  idx=. I. 2 ~: (3!:0)&> {."1 dat
-  ((<<<idx){hdr)=: <"1 (<<<idx) { dat
-  (idx{hdr)=: idx { dat
+  hdr111=. uniqify_pdsv_ coerce2Name_pdsv_&.> x
+  dat111=. |: makenumcol y
+  idx111=. I. 2 ~: (3!:0)&> {."1 dat111
+  erase 'x y'
+  ((<<<idx111){hdr111)=: <"1 (<<<idx111) { dat111
+  (idx111{hdr111)=: idx111 { dat111
   EMPTY
 )
