@@ -129,17 +129,20 @@ fixdsv=: 3 : 0
   :
   dat=. ydrp=. droplComments y
   'fd sd'=. 2{. boxopen x
-  if. ({. = {:) sd do.         NB. empty, one or two same
-    sd=. ,/(1<.#sd){.sd
-  else.
-    s=. {. '|`' -. fd          NB. use single sd that isn't fd
-    dat=. dat charsub~ ,sd,.s
-    sd=. s
+  if. #sd do.                    NB. string delimiter
+    sd=. ~.sd
+    if. 1 < #sd do.              NB. different start & end sd
+      s=. {. '|`' -. fd          NB. use single sd that isn't fd
+      dat=. dat charsub~ ,sd,.s
+      sd=. s
+    end.
+    b=. dat e. LF
+    c=. ~:/\ dat e. sd
+    msk=. b > c
+    > msk <@(x&chopstring);._2 ydrp
+  else.                          NB. no string delimiter
+    ([: <;._2 ,&fd);._2 ydrp
   end.
-  b=. dat e. LF
-  c=. ~:/\ dat e. sd
-  msk=. b > c
-  > msk <@(x&chopstring);._2 ydrp
 )
 
 NB. ---------------------------------------------------------
