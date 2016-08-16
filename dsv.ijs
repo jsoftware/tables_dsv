@@ -8,7 +8,7 @@ coclass 'pdsv'
 NB. =========================================================
 NB. utils for dsv
 
-ischar=: ] e. 2 131072"_     NB. is datatype a character
+ischar=: ] e. 2 131072 262144"_     NB. is datatype a character
 
 isreal=: ] e. 1 4 8 64 128"_ NB. is datatype numeric real
 
