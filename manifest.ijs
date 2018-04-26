@@ -11,7 +11,9 @@ Contributed by Ric Sherlock.
 
 VERSION=: '1.0.14'
 
-RELEASE=: 'j803 j804 j805 j806 j807 j802 j801 j701 j602'
+RELEASE=: ''
+
+FOLDER=: 'tables/dsv'
 
 PLATFORMS=: ''
 
