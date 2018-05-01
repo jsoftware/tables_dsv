@@ -1,6 +1,6 @@
 NB. build
 
-writesource_jp_ '~Addons/tables/dsv/source/source';'~Addons/tables/dsv/dsv.ijs'
+writesource_jp_ '~Addons/tables/dsv/source';'~Addons/tables/dsv/dsv.ijs'
 
 (jpath '~addons/tables/dsv/dsv.ijs') (fcopynew ::0:) jpath '~Addons/tables/dsv/dsv.ijs'
 
