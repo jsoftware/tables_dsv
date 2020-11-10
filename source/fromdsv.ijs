@@ -24,7 +24,7 @@ fixdsv=: 3 : 0
       sd=. s
     end.
     b=. dat = LF
-    c=. ~:/\ +./ (,sd) =/ dat
+    c=. ~:/\ dat = {.sd
     msk=. b > c
     > msk <@(x&chopstring);._2 ydrp
   else.                          NB. no string delimiter
