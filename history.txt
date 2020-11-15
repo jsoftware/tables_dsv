@@ -1,5 +1,9 @@
 text/delimited - change history
 
+== 1.0.15 ==
+ * Improve performance through use of `=` rather then `e.`
+ * Add support for VSCode build and test tasks
+
 == 1.0.9 ==
  * Improve performance when empty string delimter specified
 

@@ -9,7 +9,7 @@ Supports user-defined field and string delimiters.
 Contributed by Ric Sherlock.
 )
 
-VERSION=: '1.0.14'
+VERSION=: '1.0.15'
 
 RELEASE=: ''
 
@@ -22,4 +22,6 @@ history.txt
 manifest.ijs
 dsv.ijs
 test/test_dsv.ijs
+test/mixed.tsv
+test/test.tsv
 )
