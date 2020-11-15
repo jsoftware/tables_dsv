@@ -6,6 +6,7 @@ Note 'To run all tests:'
 
 cocurrent 'testdsv'
 load 'tables/dsv'
+load 'validate'
 
 NB. =========================================================
 NB. create nouns for testing
@@ -163,7 +164,7 @@ test=: 3 : 0
   assert. (8!:0 b2)-: fixdsv delimitarray b2
   assert. 8 3 -: $ fixdsv delimitarray 2 4 3$,b2
   nempty=. +/0=,#&> b2
-  nwrongtype=. +/0=,(3!:0 each b2) = 3!:0 each makenum fixdsv delimitarray b2
+  nwrongtype=. +/0=,(isnumeric each b2) = isnumeric each makenum fixdsv delimitarray b2
   assert. nempty=nwrongtype NB. empty cells change type but not problem
   assert. d -: 0".> fixdsv delimitarray <"0 d
   assert. (delimitarray d1) -: delimitarray <"0 d
