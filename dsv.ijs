@@ -136,8 +136,8 @@ fixdsv=: 3 : 0
       dat=. dat charsub~ ,sd,.s
       sd=. s
     end.
-    b=. dat e. LF
-    c=. ~:/\ dat e. sd
+    b=. dat = LF
+    c=. ~:/\ dat = {.sd
     msk=. b > c
     > msk <@(x&chopstring);._2 ydrp
   else.                          NB. no string delimiter
